@@ -10,7 +10,8 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.views.decorators.csrf import csrf_exempt # type: ignore
 import json
 from django.db.models import Avg # type: ignore
-
+from django.http import HttpResponse # type: ignore
+from django.contrib.auth import get_user_model # type: ignore
 from decimal import Decimal
 from django.utils import timezone # type: ignore
 from datetime import timedelta
@@ -1216,3 +1217,15 @@ def search(request):
         return JsonResponse({"error": "Invalid category"}, status=400)
 
     return JsonResponse({"results": results})
+
+
+def create_admin(request):
+    User = get_user_model()
+    if not User.objects.filter(username='admin_render').exists():
+        User.objects.create_superuser(
+            username='admin_render',
+            email='admin@example.com',
+            password='YourStrongPassword'
+        )
+        return HttpResponse("Superuser created")
+    return HttpResponse("Superuser already exists")
