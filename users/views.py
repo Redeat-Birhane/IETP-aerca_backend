@@ -90,8 +90,12 @@ def signup_view(request):
 
 
 @csrf_exempt
-@login_required
 def profile(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            "error": "Authentication required",
+            "authenticated": False
+        }, status=401)
     user = request.user
     data = {
         "username": user.username,
