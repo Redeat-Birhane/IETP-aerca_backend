@@ -240,6 +240,8 @@ def profile(request):
 
 
 
+
+@ensure_csrf_cookie  # type: ignore # ensures csrftoken cookie is sent
 def login_view(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -254,7 +256,9 @@ def login_view(request):
     user = authenticate(request, email=email, password=password)
     if user:
         login(request, user)
-        return JsonResponse({"message": "Login successful", "role": user.role})
+        response = JsonResponse({"message": "Login successful", "role": user.role})
+        return response
+
     return JsonResponse({"message": "Invalid Credentials"}, status=401)
 
 @csrf_exempt
