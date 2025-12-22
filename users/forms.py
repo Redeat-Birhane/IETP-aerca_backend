@@ -34,5 +34,6 @@ class TaxWorkerSignupForm(BaseSignupForm):
     company_id_card = forms.FileField(required=True)
     phone_number = forms.CharField(required=False)
     years_of_experience = forms.IntegerField(required=True)
+    location = forms.CharField(required=False) 
 
 

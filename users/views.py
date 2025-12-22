@@ -53,7 +53,8 @@ def signup_view(request):
                 organization_name=form.cleaned_data.get("organization_name"),
                 phone_number=form.cleaned_data.get("phone_number"),
                 years_of_experience=form.cleaned_data.get("years_of_experience"),
-                photo=form.cleaned_data.get("photo")
+                photo=form.cleaned_data.get("photo"),
+                location=form.cleaned_data.get("location"),
             )
 
         elif user.role == "transitor":
@@ -136,6 +137,7 @@ def profile(request):
             "rating": str(profile.rating),
             "earning": str(profile.earning),
             "organization_name": profile.organization_name,
+            "location": profile.location,
             "transitor_license": profile.transitor_license.url if hasattr(profile, 'transitor_license') and profile.transitor_license else None
         })
 
@@ -358,6 +360,7 @@ def list_tax_workers(request):
             "organization_name": profile.organization_name,
             "work_email": profile.work_email,
             "phone_number": profile.phone_number,
+            "location": profile.location,
             "photo": profile.photo.url if profile.photo else None,
             "clients_served": profile.clients_served,
             "rating": str(profile.rating),
@@ -510,12 +513,14 @@ def answer_question(request):
 def list_transitors(request):
     transitors = TransitorProfile.objects.select_related("user")
     data = []
+
     for t in transitors:
         try:
             req = TransitorRequest.objects.get(user=request.user, transitor=t)
             status = req.status
         except TransitorRequest.DoesNotExist:
             status = None
+        avg_rating = TransitorRating.objects.filter(transitor=t).aggregate(Avg('rating'))['rating__avg']
 
         data.append({
             "username": t.user.username,
@@ -523,8 +528,9 @@ def list_transitors(request):
             "job_title": t.job_title,
             "photo": t.photo.url if t.photo else None,
             "status": status,
-            "rating": str(t.rating) if t.rating is not None else None
+            "rating": str(avg_rating) if avg_rating is not None else None
         })
+
     return JsonResponse({"transitors": data})
 
 
