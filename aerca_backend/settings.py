@@ -187,7 +187,7 @@ SESSION_COOKIE_SECURE = True     # True only if using HTTPS
 # CSRF cookies
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_COOKIE_HTTPONLY = False      # Must be readable by JS
-CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE =  "None"
 CSRF_COOKIE_SECURE = True
 
 
