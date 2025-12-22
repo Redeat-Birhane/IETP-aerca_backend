@@ -175,23 +175,22 @@ AUTHENTICATION_BACKENDS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
-    "https://ietp-aerca-frontend-3brp-obx5ps1fg.vercel.app"
+    "https://ietp-aerca-frontend-3brp-o50qnavws.vercel.app/"
     
 ]
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_NAME = "sessionid"
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = "None"  # Lax works in localhost, None requires HTTPS
-SESSION_COOKIE_SECURE = True     # True only if using HTTPS
+SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = True
 
-# CSRF cookies
 CSRF_COOKIE_NAME = "csrftoken"
-CSRF_COOKIE_HTTPONLY = False      # Must be readable by JS
-CSRF_COOKIE_SAMESITE =  "None"
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
 
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000",
 "http://localhost:3001",
-"https://ietp-aerca-frontend-3brp-obx5ps1fg.vercel.app"
+"https://ietp-aerca-frontend-3brp-o50qnavws.vercel.app/"
 ]
