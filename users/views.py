@@ -1269,6 +1269,7 @@ def search(request):
     return JsonResponse({"results": results})
 
 @login_required
+@csrf_exempt
 def delete_account(request):
     if request.method == "POST":
         user = request.user
