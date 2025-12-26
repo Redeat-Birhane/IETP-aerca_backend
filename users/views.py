@@ -17,7 +17,7 @@ from django.utils import timezone # type: ignore
 from datetime import timedelta
 
 
-
+@csrf_exempt
 def signup_view(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
