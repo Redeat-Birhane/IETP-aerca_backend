@@ -1160,6 +1160,7 @@ def search(request):
     query = request.GET.get("query", "")
     min_price = Decimal(request.GET.get("min_price"))
     max_price = Decimal(request.GET.get("max_price"))
+    show_new = request.GET.get("new")
 
     results = []
 
@@ -1212,9 +1213,9 @@ def search(request):
 
     elif category == "store":
         items = StoreItem.objects.all()
-        if min_price:
+        if min_price is not None:
             items = items.filter(price__gte=min_price)
-        if max_price:
+        if max_price is not None:
             items = items.filter(price__lte=max_price)
         results = [
             {
@@ -1227,9 +1228,33 @@ def search(request):
             }
             for item in items
         ]
+    elif category == "laws":
+        laws = LawAuthority.objects.filter(name__icontains=query)
+        if show_new == "true":
+            thirty_days_ago = timezone.now() - timedelta(days=30)
+            laws = laws.filter(created_at__gte=thirty_days_ago)
+        results = [
+            {
+                "id": law.id,
+                "name": law.name,
+                "description": law.description,
+                "category": law.category,
+                "year": law.year,
+                "created_at": law.created_at
+            }
+            for law in laws
+        ]
 
     else:
         return JsonResponse({"error": "Invalid category"}, status=400)
 
     return JsonResponse({"results": results})
 
+@login_required
+def delete_account(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete() 
+        logout(request) 
+        return JsonResponse({"message": "Account deleted successfully."})
+    return JsonResponse({"error": "Invalid request method."}, status=400)
